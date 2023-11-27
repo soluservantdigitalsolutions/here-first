@@ -66,6 +66,7 @@ const verifyEmail = async (token) => {
   return { user };
 };
 
+
 const login = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) {

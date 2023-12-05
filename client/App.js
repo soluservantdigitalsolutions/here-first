@@ -11,6 +11,11 @@ import TabNavigator from "./components/TabNavigator/TabNavigator";
 import { AuthContext } from "./context/AuthContext.js";
 import { getData } from "./utils/Storage/storage.js";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import RestaurantForm from "./generalScreens/ResturantForm/ResturantForm";
+import RestaurantProfile from "./generalScreens/RestaurantProfile/RestaurantProfile";
+import FoodDetailsScreen from "./generalScreens/FoodDetails/FoodDetails";
+import OrderCart from "./generalScreens/OrderCart/OrderCart";
+import ThanksForOrdering from "./generalScreens/ThanksForOrdering/ThanksForOrdering";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,7 +35,6 @@ export default function App() {
   }, []);
 
   return (
-    
     <AuthContext.Provider
       value={{ isSignedIn, changeAuthStatus: setIsSignedIn }}
     >
@@ -41,6 +45,46 @@ export default function App() {
               <Stack.Screen
                 name="Home"
                 component={TabNavigator}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="RestaurantForm"
+                component={RestaurantForm}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="RestaurantProfile"
+                component={RestaurantProfile}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Register"
+                component={Register}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="FoodDetails"
+                component={FoodDetailsScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="OrderCart"
+                component={OrderCart}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ThanksForOrdering"
+                component={ThanksForOrdering}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="User"
+                component={User}
                 options={{ headerShown: false }}
               />
             </>

@@ -18,12 +18,11 @@ const verifyEmail = async (req, res) => {
     // Send an HTML response
     res.send(`
       <h1>Email is verified</h1>
-      <a href="/">Go back to app</a>
+      <h3 href="/">Go back to app</h3>
 
       <style>
         body { text-align: center; padding: 20px; }
         h1 { color: green; }
-        a { display: inline-block; margin-top: 20px; padding: 10px; background: blue; color: white; text-decoration: none; }
       </style>
     `);
   } catch (error) {

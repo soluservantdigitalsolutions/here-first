@@ -1,0 +1,190 @@
+import React from "react";
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
+import { COLORS } from "../../constants/color";
+import PreferenceItem from "../../components/PreferenceItem";
+
+const FoodDetailsScreen = () => {
+  const navigation = useNavigation();
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.upperView}>
+          <ImageBackground
+            source={require("../../assets/background.jpg")}
+            style={styles.imageBackground}
+          >
+            {/* <View style={styles.overlay} /> */}
+
+            <View style={styles.iconContainer}>
+              <View style={styles.iconBackground}>
+                <Icon
+                  name="close"
+                  size={20}
+                  color={COLORS.PRIMARY}
+                  onPress={() => navigation.goBack()}
+                />
+              </View>
+              <View style={styles.iconBackground}>
+                <Icon name="heart" size={20} color={COLORS.PRIMARY} />
+              </View>
+            </View>
+          </ImageBackground>
+        </View>
+        <View style={styles.lowerView}>
+          <View style={styles.foodDetailsContainer}>
+            <Text style={styles.foodName}>Random Food</Text>
+            <Text style={styles.foodPrice}>$10</Text>
+          </View>
+          <View style={styles.restaurantDetailsContainer}>
+            <Text style={styles.restaurantName}>Restaurant Name</Text>
+          </View>
+          <View style={styles.foodDescriptionContainer}>
+            <Text style={styles.foodDescription}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </Text>
+          </View>
+          <View style={styles.extraPreferencesContainer}>
+            <Text style={styles.extraPreferencesTitle}>Extra Preferences</Text>
+            <View style={styles.preferencesWrapper}>
+              <PreferenceItem title="Preference 1" selected={true} />
+              <PreferenceItem title="Extra Cheese" selected={false} />
+              <PreferenceItem title="Preference 3" selected={true} />
+            </View>
+          </View>
+          <TouchableOpacity
+            style={styles.addToCartButton}
+            onPress={() => navigation.navigate("OrderCart")}
+          >
+            <Text style={styles.addToCartButtonText}>Add To Cart</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  upperView: {
+    flex: 0.3,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    overflow: "hidden",
+  },
+  imageBackground: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(46, 204, 64, 0.2)",
+  },
+  lowerView: {
+    flex: 0.7,
+    backgroundColor: "white",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  iconBackground: {
+    backgroundColor: "#fff",
+    borderRadius: 100,
+    width: 30,
+    height: 30,
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  foodDetailsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    gap: 20,
+  },
+  foodName: {
+    fontWeight: "900",
+    fontSize: 36,
+    flexWrap: "wrap",
+    flex: 1,
+  },
+  foodPrice: {
+    color: COLORS.PRIMARY,
+    fontWeight: "bold",
+    fontSize: 36,
+  },
+  restaurantDetailsContainer: {
+    paddingHorizontal: 20,
+  },
+  restaurantName: {
+    fontSize: 14,
+    fontWeight: "300",
+    textDecorationLine: "underline",
+  },
+  foodDescriptionContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  foodDescription: {
+    fontSize: 16,
+    fontWeight: "400",
+  },
+  extraPreferencesContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  extraPreferencesTitle: {
+    fontSize: 24,
+    fontWeight: "900",
+    marginBottom: 10,
+  },
+  preferencesWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+  },
+  addToCartButton: {
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
+    borderRadius: 5,
+    margin: 20,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  addToCartButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+});
+
+export default FoodDetailsScreen;

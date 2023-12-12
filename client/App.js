@@ -16,6 +16,9 @@ import RestaurantProfile from "./generalScreens/RestaurantProfile/RestaurantProf
 import FoodDetailsScreen from "./generalScreens/FoodDetails/FoodDetails";
 import OrderCart from "./generalScreens/OrderCart/OrderCart";
 import ThanksForOrdering from "./generalScreens/ThanksForOrdering/ThanksForOrdering";
+import Wallet from "./generalScreens/Wallet/Wallet";
+import VerifyEmail from "./generalScreens/VerifyEmail/VerifyEmail";
+import UploadFood from "./generalScreens/UploadFood/UploadFood";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -87,6 +90,17 @@ export default function App() {
                 component={User}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen
+                name="Wallet"
+                component={Wallet}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="UploadFood"
+                component={UploadFood}
+                options={{ headerShown: false }}
+              />
             </>
           ) : (
             <>
@@ -103,6 +117,11 @@ export default function App() {
               <Stack.Screen
                 name="Register"
                 component={Register}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="VerifyEmail"
+                component={VerifyEmail}
                 options={{ headerShown: false }}
               />
             </>

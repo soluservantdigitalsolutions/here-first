@@ -4,9 +4,9 @@ const User = require("../models/user.model");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
-const signup = async (req, username, email, password) => {
+const signup = async (req, username, email, password, fullName) => {
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ username, email, password: hashedPassword });
+  const user = new User({ username, email, password: hashedPassword, fullName });
 
   // Generate a verification token
   const verificationToken = crypto.randomBytes(20).toString("hex");

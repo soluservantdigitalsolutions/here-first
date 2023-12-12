@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { View, TextInput, ImageBackground, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+} from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { signin } from "../../utils/API/api.js";
@@ -49,7 +57,7 @@ export default function Login() {
         <View style={styles.formContainer}>
           <Text style={styles.title}>
             Login to Your Account on
-            <Text style={{ color: COLORS.PRIMARY }}>HereFirst! </Text>{" "}
+            <Text style={{ color: COLORS.PRIMARY }}> HereFirst! </Text>{" "}
           </Text>
           <View style={styles.inputContainer}>
             <Icon name="envelope" type="font-awesome" color="#808080" />
@@ -106,6 +114,9 @@ export default function Login() {
             visible={visible}
             onDismiss={() => setVisible(false)}
             duration={Snackbar.DURATION_SHORT}
+            wrapperStyle={{
+              backgroundColor: COLORS.PRIMARY,
+            }}
           >
             {snackbarMessage}
           </Snackbar>

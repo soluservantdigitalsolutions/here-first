@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -12,10 +12,20 @@ import { COLORS } from "../../constants/color";
 import { Button } from "react-native-elements";
 import { Input, Icon } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import { createRestaurant } from "../../utils/API/api";
+import { getData } from "../../utils/Storage/storage";
+import { Snackbar } from "react-native-paper";
 
 export default function RestaurantForm({ navigation }) {
   const [logo, setLogo] = React.useState(null);
   const [coverPhoto, setCoverPhoto] = React.useState(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState("");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const selectLogo = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -42,6 +52,53 @@ export default function RestaurantForm({ navigation }) {
       setCoverPhoto(result.uri);
     }
   };
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const user = await getData("user");
+      console.log("user", user);
+      setUserId(user.user._id);
+    };
+
+    fetchUserId();
+  }, []);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      if (
+        !name ||
+        !description ||
+        !userId ||
+        !logo ||
+        !coverPhoto ||
+        !address
+      ) {
+        setSnackbarMessage("All fields are required");
+        setSnackbarVisible(true);
+        return;
+      }
+      const newRestaurant = {
+        name: name,
+        description: description,
+        userId: userId,
+        profilePicture: logo,
+        coverPicture: coverPhoto,
+        address: address,
+      };
+      const response = await createRestaurant(newRestaurant);
+      console.log(response.data);
+      navigation.navigate("RestaurantProfile", { userId: userId });
+      setSnackbarMessage("Restaurant created successfully");
+      setSnackbarVisible(true);
+    } catch (error) {
+      console.error(error);
+      setSnackbarMessage("An error occurred");
+      setSnackbarVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <ImageBackground
       source={require("../../assets/background.jpg")}
@@ -58,13 +115,21 @@ export default function RestaurantForm({ navigation }) {
             <Text style={{ color: COLORS.PRIMARY }}>HereFirst! </Text>{" "}
           </Text>
           <View style={styles.inputContainer}>
-            <Button title="Select Logo" onPress={selectLogo} />
+            <Button
+              title="Select Logo"
+              buttonStyle={{ backgroundColor: COLORS.PRIMARY }}
+              onPress={selectLogo}
+            />
             {logo && (
               <Image source={{ uri: logo }} style={{ width: 50, height: 50 }} />
             )}
           </View>
           <View style={styles.inputContainer}>
-            <Button title="Select Cover Photo" onPress={selectCoverPhoto} />
+            <Button
+              title="Select Cover Photo"
+              buttonStyle={{ backgroundColor: COLORS.PRIMARY }}
+              onPress={selectCoverPhoto}
+            />
             {coverPhoto && (
               <Image
                 source={{ uri: coverPhoto }}
@@ -78,14 +143,19 @@ export default function RestaurantForm({ navigation }) {
               placeholder="Restaurant Name"
               style={styles.input}
               placeholderTextColor="#808080"
+              value={name}
+              onChangeText={setName}
             />
           </View>
           <View style={styles.inputContainer}>
             <Icon name="info-circle" type="font-awesome" color="#808080" />
+
             <TextInput
               placeholder="Restaurant Description"
               style={styles.input}
               placeholderTextColor="#808080"
+              value={description}
+              onChangeText={setDescription}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -94,12 +164,15 @@ export default function RestaurantForm({ navigation }) {
               placeholder="Restaurant Address"
               style={styles.input}
               placeholderTextColor="#808080"
+              value={address}
+              onChangeText={setAddress}
             />
           </View>
           <Button
             color={COLORS.PRIMARY}
             title="Create Restaurant"
-            onPress={() => navigation.navigate("RestaurantProfile")}
+            onPress={handleSubmit}
+            loading={loading}
             containerStyle={{
               width: "100%",
               justifyContent: "center",
@@ -119,6 +192,16 @@ export default function RestaurantForm({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
+        <Snackbar
+          visible={snackbarVisible}
+          onDismiss={() => setSnackbarVisible(false)}
+          duration={Snackbar.DURATION_SHORT}
+          wrapperStyle={{
+            backgroundColor: COLORS.PRIMARY,
+          }}
+        >
+          {snackbarMessage}
+        </Snackbar>
       </View>
     </ImageBackground>
   );

@@ -6,6 +6,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  fullName: {
+    type: String,
+    required: true,
+  },
   profileImg: {
     type: String,
   },
@@ -18,8 +22,17 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  accountBalance: {
+  wallet: {
     type: Number,
+    default: 0,
+  },
+  hasRestaurant: {
+    type: Boolean,
+    default: false,
+  },
+  restaurantId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Restaurant",
   },
   verificationToken: {
     type: String,

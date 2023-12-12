@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Text } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Avatar, Button, Header, Icon } from "react-native-elements";
 import { COLORS } from "../../constants/color";
 import RestaurantForm from "../../generalScreens/ResturantForm/ResturantForm.js";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkUserHasRestaurant } from "../../utils/API/api";
+import { getData } from "../../utils/Storage/storage";
 
 export default function User({ navigation }) {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [userHasRestaurant, setUserHasRestaurant] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const user = await getData("user");
+      setCurrentUser(user.user);
+      if (user) {
+        setIsSignedIn(true);
+        try {
+          const { data: hasRestaurant } = await checkUserHasRestaurant(
+            user.user._id
+          );
+          setUserHasRestaurant(hasRestaurant);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
   return (
     <ScrollView>
       <SafeAreaProvider>
@@ -85,7 +109,13 @@ export default function User({ navigation }) {
                   name="angle-right"
                   type="font-awesome"
                   color={COLORS.PRIMARY}
-                  onPress={() => navigation.navigate("RestaurantForm")}
+                  onPress={() =>
+                    userHasRestaurant
+                      ? navigation.navigate("RestaurantProfile", {
+                          userId: currentUser._id,
+                        })
+                      : navigation.navigate("RestaurantForm")
+                  }
                 />
               </View>
               <View style={styles.menucontainer}>
@@ -113,7 +143,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 25,
-    backgroundColor: COLORS.COMPLIMENTARY,
+    backgroundColor: COLORS.SECONDARY,
   },
   fullName: {
     fontWeight: "bold",

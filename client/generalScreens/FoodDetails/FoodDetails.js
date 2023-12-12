@@ -1,20 +1,50 @@
-import React from "react";
-import { View, Text, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { COLORS } from "../../constants/color";
 import PreferenceItem from "../../components/PreferenceItem";
+import { getFoodDetails } from "../../utils/API/api";
+import { getRestaurantDetails } from "../../utils/API/api.js";
 
 const FoodDetailsScreen = () => {
   const navigation = useNavigation();
+  const [foodDetails, setFoodDetails] = useState(null);
+  const [restaurantDetails, setRestaurantDetails] = useState(null);
+  const { params } = useRoute();
+  const { foodId } = params;
+  console.log(foodDetails);
+  console.log("restaurant details", restaurantDetails);
 
+  useEffect(() => {
+    getFoodDetails(foodId).then((response) => {
+      setFoodDetails(response.data);
+      getRestaurantDetails(response.data.restaurantId).then((response) => {
+        setRestaurantDetails(response.data);
+      });
+    });
+  }, [foodId]);
+
+  useEffect(() => {
+    getFoodDetails(foodId).then((response) => {
+      setFoodDetails(response.data);
+    });
+  }, [foodId]);
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.upperView}>
           <ImageBackground
-            source={require("../../assets/background.jpg")}
+            source={{
+              uri: foodDetails?.image,
+            }}
             style={styles.imageBackground}
           >
             {/* <View style={styles.overlay} /> */}
@@ -36,24 +66,29 @@ const FoodDetailsScreen = () => {
         </View>
         <View style={styles.lowerView}>
           <View style={styles.foodDetailsContainer}>
-            <Text style={styles.foodName}>Random Food</Text>
-            <Text style={styles.foodPrice}>$10</Text>
+            <Text style={styles.foodName}>{foodDetails?.name}</Text>
+            <Text style={styles.foodPrice}>${foodDetails?.price}</Text>
           </View>
           <View style={styles.restaurantDetailsContainer}>
             <Text style={styles.restaurantName}>Restaurant Name</Text>
           </View>
           <View style={styles.foodDescriptionContainer}>
             <Text style={styles.foodDescription}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              {foodDetails?.description}
             </Text>
           </View>
           <View style={styles.extraPreferencesContainer}>
             <Text style={styles.extraPreferencesTitle}>Extra Preferences</Text>
             <View style={styles.preferencesWrapper}>
-              <PreferenceItem title="Preference 1" selected={true} />
-              <PreferenceItem title="Extra Cheese" selected={false} />
-              <PreferenceItem title="Preference 3" selected={true} />
+              {foodDetails?.preferences[0]
+                .split(",")
+                .map((preference, index) => (
+                  <PreferenceItem
+                    key={index}
+                    title={preference}
+                    selected={true}
+                  />
+                ))}
             </View>
           </View>
           <TouchableOpacity

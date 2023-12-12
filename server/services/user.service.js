@@ -20,3 +20,11 @@ exports.deleteUser = async (id) => {
 exports.getAllUsers = async () => {
   return await User.find({});
 };
+
+exports.updateWallet = async (userId, amount) => {
+  return await User.findByIdAndUpdate(
+    userId,
+    { $inc: { wallet: amount } },
+    { new: true }
+  );
+};

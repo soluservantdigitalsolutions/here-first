@@ -25,15 +25,14 @@ export default function Register() {
   const [visible, setVisible] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [fullName, setFullName] = useState("");
   const { changeAuthStatus } = React.useContext(AuthContext);
-
+console.log(email);
   const handleRegister = async () => {
     setLoading(true);
     try {
-      const response = await signup({ username, email, password });
-      await storeData("user", response.data);
-      changeAuthStatus(true);
-      navigation.navigate("Home");
+      const response = await signup({ username, email, password, fullName });
+      navigation.navigate("VerifyEmail"); // replace 'MyNewPage' with the name of your new page
       setSnackbarMessage("Registration Successful!");
       setVisible(true);
     } catch (error) {
@@ -67,6 +66,15 @@ export default function Register() {
               style={styles.input}
               placeholderTextColor="#808080"
               onChangeText={setUsername}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Icon name="user" type="font-awesome" color="#808080" />
+            <TextInput
+              placeholder="Full Name"
+              style={styles.input}
+              placeholderTextColor="#808080"
+              onChangeText={setFullName}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -124,6 +132,9 @@ export default function Register() {
             visible={visible}
             onDismiss={() => setVisible(false)}
             duration={Snackbar.DURATION_SHORT}
+            wrapperStyle={{
+              backgroundColor: COLORS.PRIMARY,
+            }}
           >
             {snackbarMessage}
           </Snackbar>

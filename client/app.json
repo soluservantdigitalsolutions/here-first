@@ -7,28 +7,40 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "here-first",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
+      "package": "here.first",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#17B169"
+      },
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
         "backgroundColor": "#ffffff"
+      },
+      "assetBundlePatterns": [
+        "**/*"
+      ],
+      "ios": {
+        "supportsTablet": true
+      },
+      "android": {
+        "adaptiveIcon": {
+          "foregroundImage": "./assets/adaptive-icon.png",
+          "backgroundColor": "#ffffff"
+        }
+      },
+      "web": {
+        "favicon": "./assets/favicon.png"
+      },
+      "plugins": [
+        "react-native-email-link"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95bb2875-ba91-46ed-a5a2-5ab827ac4eb1"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "react-native-email-link"
-    ]
+    }
   }
 }

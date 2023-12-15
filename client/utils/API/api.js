@@ -66,7 +66,6 @@ export const createFood = async (newFood) => {
   });
   formData.append("restaurantId", newFood.restaurantId);
 
-
   const config = {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -84,7 +83,7 @@ export const getUser = (id) => API.get(`/users/${id}`);
 export const getFoodsByRestaurant = (restaurantId) =>
   API.get(`/food/get-foods/${restaurantId}`);
 
-  export const getFoodDetails = (foodId) => API.get(`/food/get-food/${foodId}`);
+export const getFoodDetails = (foodId) => API.get(`/food/get-food/${foodId}`);
 
-  export const getRestaurantDetails = (restaurantId) =>
-    API.get(`/restaurant/get-restaurant-by-user/${restaurantId}`);
+export const getRestaurantDetails = (restaurantId) =>
+  API.get(`/restaurant/get-restaurant-by-user/${restaurantId}`);

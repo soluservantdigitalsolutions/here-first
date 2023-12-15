@@ -20,8 +20,8 @@ const signup = async (req, username, email, password, fullName) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.GMAIL_ADDRESS,
-      pass: process.env.GMAIL_PASSWORD
+      user: "soluservant@gmail.com",
+      pass: "agrqnriihxjvcoac",
     },
   });
   const mailOptions = {

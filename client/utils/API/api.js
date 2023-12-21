@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const API = axios.create({
-  baseURL: "https://here-first.onrender.com/api/v1",
+  baseURL: "http://192.168.251.60:3000/api/v1",
 }); // replace with your server URL
 
 API.interceptors.request.use(

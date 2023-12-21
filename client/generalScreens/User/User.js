@@ -57,8 +57,13 @@ export default function User({ navigation }) {
                 title="SA"
                 containerStyle={{ backgroundColor: COLORS.PRIMARY }}
               />
-              <Text style={styles.fullName}>Sylvester Asante</Text>
-              <Text style={styles.username}>@asantesylvesterkwame</Text>
+              <Text style={styles.fullName}>{currentUser?.fullName}</Text>
+              <Text style={styles.username}>{currentUser?.username}</Text>
+            </View>
+
+            <View style={styles.balanceContainer}>
+              <Text style={styles.balanceText}>Current Balance</Text>
+              <Text style={styles.balanceAmount}>${currentUser?.wallet}</Text>
             </View>
             <View style={{ width: "100%" }}>
               <View style={styles.menucontainer}>
@@ -116,6 +121,34 @@ export default function User({ navigation }) {
                         })
                       : navigation.navigate("RestaurantForm")
                   }
+                />
+              </View>
+              <View style={styles.menucontainer}>
+                <Icon
+                  name="money-bill"
+                  type="font-awesome-5"
+                  color={COLORS.PRIMARY}
+                />
+                <Text style={styles.infoText}>Deposit</Text>
+                <Icon
+                  name="angle-right"
+                  type="font-awesome"
+                  color={COLORS.PRIMARY}
+                  onPress={() => navigation.navigate("Deposit")}
+                />
+              </View>
+              <View style={styles.menucontainer}>
+                <Icon
+                  name="wallet"
+                  type="font-awesome-5"
+                  color={COLORS.PRIMARY}
+                />
+                <Text style={styles.infoText}>Withdrawal</Text>
+                <Icon
+                  name="angle-right"
+                  type="font-awesome"
+                  color={COLORS.PRIMARY}
+                  onPress={() => navigation.navigate("Withdrawal")}
                 />
               </View>
               <View style={styles.menucontainer}>
@@ -180,5 +213,22 @@ const styles = StyleSheet.create({
   personalInfoText: {
     fontSize: 16,
     fontWeight: "200",
+  },
+  balanceContainer: {
+    width: "100%",
+    height: 100,
+    backgroundColor: COLORS.PRIMARY,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  balanceText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  balanceAmount: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
   },
 });

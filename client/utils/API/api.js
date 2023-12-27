@@ -2,7 +2,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const API = axios.create({
-  baseURL: "http://192.168.251.60:3000/api/v1",
+  baseURL: "https://here-first.onrender.com/api/v1",
 }); // replace with your server URL
 
 API.interceptors.request.use(
@@ -87,3 +87,28 @@ export const getFoodDetails = (foodId) => API.get(`/food/get-food/${foodId}`);
 
 export const getRestaurantDetails = (restaurantId) =>
   API.get(`/restaurant/get-restaurant-by-user/${restaurantId}`);
+
+export const paystackDeposit = async (email, amount, phoneNumber) => {
+  try {
+    const response = await API.post("/users/initialize-payment", {
+      email,
+      amount,
+      phoneNumber,
+    });
+    return response.data.authorizationUrl;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getAllFoods = () => API.get("/food/get-foods");
+
+export const createOrder = async (ordersData) => {
+  try {
+    const response = await API.post("/orders/create-order", ordersData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

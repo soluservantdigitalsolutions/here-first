@@ -20,6 +20,8 @@ app.use(cors());
 
 app.use("/", routes);
 
+
+
 app.get("/", (req, res) => {
   res.send("it is working");
 });

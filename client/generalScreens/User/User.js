@@ -7,6 +7,7 @@ import RestaurantForm from "../../generalScreens/ResturantForm/ResturantForm.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { checkUserHasRestaurant } from "../../utils/API/api";
 import { getData } from "../../utils/Storage/storage";
+import { getUser } from "../../utils/API/api";
 
 export default function User({ navigation }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,6 +23,29 @@ export default function User({ navigation }) {
         try {
           const { data: hasRestaurant } = await checkUserHasRestaurant(
             user.user._id
+          );
+          setUserHasRestaurant(hasRestaurant);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  // ...
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const user = await getData("user");
+      if (user) {
+        setIsSignedIn(true);
+        try {
+          const response = await getUser(user.user._id);
+          setCurrentUser(response.data);
+          const { data: hasRestaurant } = await checkUserHasRestaurant(
+            response.data._id
           );
           setUserHasRestaurant(hasRestaurant);
         } catch (error) {
@@ -63,7 +87,7 @@ export default function User({ navigation }) {
 
             <View style={styles.balanceContainer}>
               <Text style={styles.balanceText}>Current Balance</Text>
-              <Text style={styles.balanceAmount}>${currentUser?.wallet}</Text>
+              <Text style={styles.balanceAmount}>$ {currentUser?.wallet}</Text>
             </View>
             <View style={{ width: "100%" }}>
               <View style={styles.menucontainer}>

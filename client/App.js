@@ -19,6 +19,8 @@ import ThanksForOrdering from "./generalScreens/ThanksForOrdering/ThanksForOrder
 import Wallet from "./generalScreens/Wallet/Wallet";
 import VerifyEmail from "./generalScreens/VerifyEmail/VerifyEmail";
 import UploadFood from "./generalScreens/UploadFood/UploadFood";
+import Deposit from "./generalScreens/Deposit/Deposit";
+import { CartProvider } from "./context/CartContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,96 +40,108 @@ export default function App() {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ isSignedIn, changeAuthStatus: setIsSignedIn }}
-    >
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome">
-          {isSignedIn ? (
-            <>
-              <Stack.Screen
-                name="Home"
-                component={TabNavigator}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="RestaurantForm"
-                component={RestaurantForm}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="RestaurantProfile"
-                component={RestaurantProfile}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={Register}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="FoodDetails"
-                component={FoodDetailsScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="OrderCart"
-                component={OrderCart}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="ThanksForOrdering"
-                component={ThanksForOrdering}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="User"
-                component={User}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Wallet"
-                component={Wallet}
-                options={{ headerShown: false }}
-              />
+    <CartProvider>
+      <AuthContext.Provider
+        value={{ isSignedIn, changeAuthStatus: setIsSignedIn }}
+      >
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Welcome">
+            {isSignedIn ? (
+              <>
+                <Stack.Screen
+                  name="Home"
+                  component={TabNavigator}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="RestaurantForm"
+                  component={RestaurantForm}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="RestaurantProfile"
+                  component={RestaurantProfile}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Register"
+                  component={Register}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="FoodDetails"
+                  component={FoodDetailsScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="OrderCart"
+                  component={OrderCart}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="ThanksForOrdering"
+                  component={ThanksForOrdering}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="User"
+                  component={User}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Wallet"
+                  component={Wallet}
+                  options={{ headerShown: false }}
+                />
 
-              <Stack.Screen
-                name="UploadFood"
-                component={UploadFood}
-                options={{ headerShown: false }}
-              />
-            </>
-          ) : (
-            <>
-              <Stack.Screen
-                name="Welcome"
-                component={Welcome}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={Register}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="VerifyEmail"
-                component={VerifyEmail}
-                options={{ headerShown: false }}
-              />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+                <Stack.Screen
+                  name="UploadFood"
+                  component={UploadFood}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Deposit"
+                  component={Deposit}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="VerifyEmail"
+                  component={VerifyEmail}
+                  options={{ headerShown: false }}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name="Welcome"
+                  component={Welcome}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Register"
+                  component={Register}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="VerifyEmail"
+                  component={VerifyEmail}
+                  options={{ headerShown: false }}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </CartProvider>
   );
 }

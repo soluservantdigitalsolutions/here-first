@@ -1,26 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { Button } from "react-native-elements";
 import OrderSummary from "../../components/OrderSummary";
 import UserInfo from "../../components/UserInfo";
 import { COLORS } from "../../constants/color";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import { CartContext } from "../../context/CartContext";
 
-const ThanksForOrdering = ({ navigation }) => {
-  const dummyData = [
-    {
-      image: "https://via.placeholder.com/150",
-      foodName: "Food 1",
-      restaurantName: "Restaurant 1",
-      price: "$10",
-    },
-    {
-      image: "https://via.placeholder.com/150",
-      foodName: "Food 2",
-      restaurantName: "Restaurant 2",
-      price: "$20",
-    },
-  ];
+const ThanksForOrdering = ({  }) => {
+  const navigation = useNavigation();
+const [cart, setCart] = useContext(CartContext);
+  
 
   return (
     <ScrollView style={styles.container}>
@@ -32,7 +23,7 @@ const ThanksForOrdering = ({ navigation }) => {
             style={styles.shoppingBag}
           />
           <Text style={styles.thanksText}>Thanks for Ordering</Text>
-          <OrderSummary items={dummyData} />
+          <OrderSummary items={cart} />
           <View style={styles.buttonContainer}>
             {/* <Button
               title="Cancel"

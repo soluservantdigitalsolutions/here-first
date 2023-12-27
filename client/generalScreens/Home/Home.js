@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useTailwind } from "tailwind-rn";
@@ -14,19 +15,40 @@ import { Avatar } from "react-native-elements";
 
 import Section from "../../components/TabNavigator/Section";
 import UserInfo from "../../components/UserInfo";
+import { getData } from "../../utils/Storage/storage";
+import { getAllFoods, getUser } from "../../utils/API/api";
 
 const Home = ({ navigation }) => {
   const tailwind = useTailwind();
-  const dummyData = [
-    { id: 1, title: "Deal 1", price: 100 },
-    { id: 2, title: "Deal 2", price: 200 },
-    { id: 3, title: "Deal 3", price: 300 },
-    { id: 4, title: "Deal 3", price: 300 },
-    { id: 5, title: "Deal 3", price: 300 },
-    { id: 6, title: "Deal 3", price: 300 },
 
-    // add more deals as needed
-  ];
+  const [foods, setFoods] = useState([]);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    getAllFoods()
+      .then((response) => {
+        setFoods(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    getData("user")
+      .then((storedUser) => {
+        getUser(storedUser.user._id)
+          .then((response) => {
+            setUser(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const renderSection = ({ item }) => (
     <Section header={item.title} deals={item.data} />
@@ -38,9 +60,14 @@ const Home = ({ navigation }) => {
         <SafeAreaView>
           <View style={styles.container}>
             <UserInfo navigation={navigation} />
-
             <View style={styles.greetView}>
-              <Text style={styles.greetText}>Hi, Asante</Text>
+              <Text style={styles.greetText}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" color={COLORS.PRIMARY} />
+                ) : (
+                  `Hi, ${user?.fullName}`
+                )}
+              </Text>
             </View>
             <View style={styles.discover}>
               <View style={styles.discoverTextView}>
@@ -63,7 +90,11 @@ const Home = ({ navigation }) => {
               </View>
             </View>
             <View>
-              <Section header={"Top deals"} deals={dummyData} />
+              {isLoading ? (
+                <ActivityIndicator size="large" color={COLORS.PRIMARY} />
+              ) : (
+                <Section header={"Explore"} deals={foods} />
+              )}
             </View>
           </View>
         </SafeAreaView>

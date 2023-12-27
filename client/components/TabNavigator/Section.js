@@ -16,14 +16,13 @@ export default Section = ({ header, deals }) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.foodCard}>
-      <Text style={{ fontWeight: "900" }}>{item.title}</Text>
+      <Text style={{ fontWeight: "900" }}>{item.name}</Text>
       <Text style={{ color: COLORS.PRIMARY, fontWeight: "900" }}>
         GHC{item.price}
       </Text>
-      <Image
-        style={styles.imageStyle}
-        source={require("../../assets/burger.png")}
-      />
+      <Image style={styles.imageStyle} source={{ uri: item.image }} />
+      <Text style={styles.restaurantStyle}>{item.restaurantId.name}</Text>
+      <Text style={styles.locationStyle}>{item.location}</Text>
       <TouchableOpacity
         style={{
           backgroundColor: COLORS.PRIMARY,
@@ -31,7 +30,7 @@ export default Section = ({ header, deals }) => {
           alignItems: "center",
           borderRadius: 5,
         }}
-        onPress={() => navigation.navigate("FoodDetails")}
+        onPress={() => navigation.navigate("FoodDetails", { foodId: item._id })}
       >
         <Text style={{ color: "white" }}>View More</Text>
       </TouchableOpacity>
@@ -44,7 +43,7 @@ export default Section = ({ header, deals }) => {
       <FlatList
         data={deals}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.name}
         numColumns={2} // set number of columns
         contentContainerStyle={styles.list}
       />
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     width: 100,
     height: 100,
+    borderRadius: 20,
   },
   foodCard: {
     backgroundColor: COLORS.SECONDARY,
@@ -71,8 +71,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: "50%", // adjust width for grid layout
     margin: "1%",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 5,
   },
   list: {
     justifyContent: "space-between",
+  },
+  locationStyle: {
+    color: "black",
+  },
+  restaurantStyle: {
+    color: COLORS.PRIMARY,
+    textDecorationLine: "underline",
+    fontWeight: "200",
+    fontSize: 16,
+    textAlign: "center",
   },
 });

@@ -1,23 +1,57 @@
-import React from "react";
-import { View, Text, Image, Button, StyleSheet } from "react-native";
+import React, { useContext, useState } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+
 import { COLORS } from "../constants/color";
 import QuantitySelector from "./QuantitySelector";
 import foodImg from "../assets/background.jpg";
+import { Button } from "react-native-elements";
+import { CartContext } from "../context/CartContext";
 
-const FoodItem = ({ item }) => {
+const FoodItem = ({ item, removeItem }) => {
+  const [quantity, setQuantity] = useState(1);
+  const [cart, setCart] = useContext(CartContext);
+
   return (
     <View style={styles.container}>
-      <Image source={foodImg} style={styles.image} />
+      <Image source={{ uri: item.image }} style={styles.image} />
       <View style={styles.detailsContainer}>
-        <Text style={{ fontWeight: "900", fontSize: 24 }}>{item.foodName}</Text>
+        <Text style={{ fontWeight: "900", fontSize: 24 }}>{item.name}</Text>
         <Text>{item.restaurantName}</Text>
+        <Text
+          style={{
+            fontWeight: "900",
+          }}
+        >
+          Preferences:{" "}
+        </Text>
+        <Text>{item.preferences.join(", ")}</Text>
+        <Button
+          title="Remove"
+          onPress={removeItem}
+          containerStyle={{
+            marginVertical: 10,
+          }}
+          buttonStyle={{
+            backgroundColor: "red",
+          }}
+        />
         <View style={styles.priceQuantityContainer}>
           <Text
             style={{ fontWeight: "900", fontSize: 16, color: COLORS.PRIMARY }}
           >
-            {item.price}
+            ${item.price}
           </Text>
-          <QuantitySelector />
+          <QuantitySelector
+            quantity={item.quantity}
+            setQuantity={(newQuantity) => {
+              const newCart = [...cart];
+              const itemIndex = newCart.findIndex(
+                (cartItem) => cartItem.id === item.id
+              );
+              newCart[itemIndex].quantity = newQuantity;
+              setCart(newCart);
+            }}
+          />
         </View>
       </View>
     </View>
@@ -36,7 +70,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 10,
-    objectFit:"cover"
+    objectFit: "cover",
   },
   detailsContainer: {
     flex: 1,

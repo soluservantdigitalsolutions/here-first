@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { COLORS } from "../constants/color";
 
-const QuantitySelector = () => {
-  const [quantity, setQuantity] = useState(1);
+const QuantitySelector = ({ quantity, setQuantity }) => {
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);

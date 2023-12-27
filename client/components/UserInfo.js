@@ -5,6 +5,7 @@ import { COLORS } from "../constants/color";
 import * as Location from "expo-location";
 import { getData } from "../utils/Storage/storage";
 import { LinearGradient } from "expo-linear-gradient";
+import { getUser } from "../utils/API/api";
 
 const UserInfo = ({ navigation }) => {
   const [user, setUser] = useState(null);
@@ -35,23 +36,42 @@ const UserInfo = ({ navigation }) => {
 
       // Get location name
       let geocoded = await Location.reverseGeocodeAsync(location.coords);
-      setLocationName(geocoded[0].name); // Use the city as the location name
+      setLocationName(geocoded[0].city); // Use the city as the location name
       setRegion(geocoded[0].region); // Use the city as the location name
 
       console.log(geocoded);
     })();
   }, []);
 
-if (!user || !location) {
-  return (
-    <LinearGradient
-      colors={["#eeeeee", "#dddddd", "#eeeeee"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      style={{ height: 20, width: "100%", marginBottom: 10 }}
-    />
-  );
-}
+  // ...
+
+  useEffect(() => {
+    // Fetch user data from the server
+    getData("user")
+      .then((user) => {
+        getUser(user.user._id)
+          .then((response) => {
+            setUser(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  if (!user || !location) {
+    return (
+      <LinearGradient
+        colors={["#eeeeee", "#dddddd", "#eeeeee"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={{ height: 20, width: "100%", marginBottom: 10 }}
+      />
+    );
+  }
 
   return (
     <View style={styles.infoView}>

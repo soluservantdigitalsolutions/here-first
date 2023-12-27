@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 const OrderSummary = ({ items }) => {
   const totalPrice = items.reduce(
-    (total, item) => total + parseFloat(item.price.slice(1)),
+    (total, item) => total + parseFloat(item.price) * item.quantity,
     0
   );
 
@@ -11,10 +11,8 @@ const OrderSummary = ({ items }) => {
     <View style={styles.container}>
       {items.map((item, index) => (
         <View key={index} style={styles.itemContainer}>
-          <Text style={{ color: "gray", fontWeight: "700" }}>
-            {item.foodName}
-          </Text>
-          <Text style={{ fontWeight: "900" }}>{item.price}</Text>
+          <Text style={{ color: "gray", fontWeight: "700" }}>{item?.name}</Text>
+          <Text style={{ fontWeight: "900" }}>${item?.price}</Text>
         </View>
       ))}
       <View style={styles.line} />

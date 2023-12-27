@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { COLORS } from "../../constants/color";
 import PreferenceItem from "../../components/PreferenceItem";
 import { getFoodDetails } from "../../utils/API/api";
 import { getRestaurantDetails } from "../../utils/API/api.js";
+import { CartContext } from "../../context/CartContext";
 
 const FoodDetailsScreen = () => {
   const navigation = useNavigation();
@@ -20,8 +21,17 @@ const FoodDetailsScreen = () => {
   const [restaurantDetails, setRestaurantDetails] = useState(null);
   const { params } = useRoute();
   const { foodId } = params;
+  const [cart, setCart] = useContext(CartContext);
+  const [isAdded, setIsAdded] = useState(false);
   console.log(foodDetails);
   console.log("restaurant details", restaurantDetails);
+
+  useEffect(() => {
+    const itemInCart = cart.find(
+      (cartItem) => cartItem.name === foodDetails?.name
+    );
+    setIsAdded(!!itemInCart);
+  }, [cart, foodDetails]);
 
   useEffect(() => {
     getFoodDetails(foodId).then((response) => {
@@ -37,6 +47,40 @@ const FoodDetailsScreen = () => {
       setFoodDetails(response.data);
     });
   }, [foodId]);
+
+ const addToCart = () => {
+   try {
+     const item = {
+       id: foodDetails?._id,
+       restaurantId: foodDetails?.restaurantId._id,
+       image: foodDetails?.image,
+       name: foodDetails?.name,
+       price: foodDetails?.price,
+       restaurantName: foodDetails?.restaurantId.name,
+       description: foodDetails?.description,
+       preferences: checkedPreferences, // add only checked preferences
+       quantity: 1,
+     };
+
+     // Check if the item is already in the cart
+     const itemInCart = cart.find((cartItem) => cartItem.name === item.name);
+
+     if (itemInCart) {
+       // If the item is in the cart, remove it
+       setCart((currentCart) =>
+         currentCart.filter((cartItem) => cartItem.name !== item.name)
+       );
+       setIsAdded(false);
+     } else {
+       // If the item is not in the cart, add it
+       setCart((currentCart) => [...currentCart, item]);
+       setIsAdded(true);
+     }
+     console.log("cart is", cart);
+   } catch (error) {
+     console.log(error);
+   }
+ };
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -70,7 +114,9 @@ const FoodDetailsScreen = () => {
             <Text style={styles.foodPrice}>${foodDetails?.price}</Text>
           </View>
           <View style={styles.restaurantDetailsContainer}>
-            <Text style={styles.restaurantName}>Restaurant Name</Text>
+            <Text style={styles.restaurantName}>
+              {foodDetails?.restaurantId.name}
+            </Text>
           </View>
           <View style={styles.foodDescriptionContainer}>
             <Text style={styles.foodDescription}>
@@ -91,11 +137,10 @@ const FoodDetailsScreen = () => {
                 ))}
             </View>
           </View>
-          <TouchableOpacity
-            style={styles.addToCartButton}
-            onPress={() => navigation.navigate("OrderCart")}
-          >
-            <Text style={styles.addToCartButtonText}>Add To Cart</Text>
+          <TouchableOpacity style={styles.addToCartButton} onPress={addToCart}>
+            <Text style={styles.addToCartButtonText}>
+              {isAdded ? "Added to Cart" : "Add to Cart"}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

@@ -6,11 +6,11 @@ const createFood = async (data) => {
 };
 
 const getFoods = async () => {
-  return await Food.find();
+  return await Food.find().populate("restaurantId", "name");
 };
 
 const getFood = async (id) => {
-  return await Food.findById(id);
+  return await Food.findById(id).populate("restaurantId", "name");
 };
 
 const updateFood = async (id, data) => {

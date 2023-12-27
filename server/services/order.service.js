@@ -4,22 +4,24 @@ const Food = require("../models/food.model");
 const Restaurant = require("../models/restaurant.model");
 
 exports.createOrder = async (data) => {
-  const { userId, foodId, quantity, restaurantId, foodPreferences } = data;
+  const { userId, food, restaurantId, foodPreferences } = data;
   const user = await User.findById(userId);
-  const food = await Food.findById(foodId);
+  const foodItem = await Food.findById(food.id);
   const restaurant = await Restaurant.findById(restaurantId);
   const restaurantOwner = await User.findById(restaurant.userId);
 
-  if (user.wallet < food.price * quantity) {
+  if (user.wallet < foodItem.price * food.quantity) {
     throw new Error("Insufficient funds in wallet");
   }
 
   const order = new Order({
     user: userId,
-    food: foodId,
+    food: {
+      id: food.id,
+      quantity: food.quantity,
+    },
     restaurant: restaurantId,
-    quantity: quantity,
-    total: food.price * quantity,
+    total: foodItem.price * food.quantity,
     foodPreferences: foodPreferences,
   });
 

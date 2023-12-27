@@ -14,7 +14,6 @@ router.use(`${base}/restaurant`, restaurantRoutes);
 router.use(`${base}/food`, foodRoutes);
 router.use(`${base}/orders`, orderRoutes);
 
-
 // Add other route handlers here
 
 module.exports = router;

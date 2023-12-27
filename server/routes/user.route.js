@@ -28,7 +28,6 @@ router.post("/initialize-payment", async (req, res) => {
   }
 });
 
-
 router.get("/verify-payment/:userid/:reference", async (req, res) => {
   const { reference, userid } = req.params;
   try {
